@@ -47,7 +47,7 @@ class itunesView extends View
       @itunesDesktop.openWindow()
 
     # Toggle equalizer on config change
-    atom.config.observe 'iTunes.showEqualizer', (value) =>
+    atom.config.observe 'atom-itunes.showEqualizer', (value) =>
       @toggleEqualizer(value)
 
   toggleEqualizer: (show) ->
