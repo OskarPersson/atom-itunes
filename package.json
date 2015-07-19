@@ -1,13 +1,75 @@
 {
-  "name": "iTunes",
+  "name": "atom-itunes",
   "main": "./lib/itunes",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Control iTunes from Atom + Now Playing",
-  "repository": "https://github.com/reduxd/atom-itunes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OskarPersson/atom-itunes"
+  },
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "applescript": "0.2.1"
+    "applescript": "0.2.1",
+    "atom-space-pen-views": "^2.0.3"
+  },
+  "consumedServices": {
+    "status-bar": {
+      "versions": {
+        "^1.0.0": "consumeStatusBar"
+      }
+    }
+  },
+  "readme": "<div align=\"center\">\n  <h3 valign=\"middle\">\n    <img src=\"http://images.apple.com/itunes/images/product_title.png\">\n    for Atom\n  </h3>\n  (fork of [atom-itunes by reduxd](https://github.com/OskarPersson/atom-itunes))\n  <h5>Control iTunes from Atom + Now Playing</h5>\n  <br>\n  <p><img src=\"http://puu.sh/7siAf.png\"></p>\n  <p><img src=\"http://puu.sh/7siwq.png\"></p>\n</div>\n\n## Features\n- Open iTunes when title is clicked.\n- Sound bars animation pauses when iTunes is paused.\n\n## Commands\n```rb\n# Playstate\nPlay\nPause\n\n# Track\nNext\nPrevious\nOpen iTunes\n```\n\n## Credits\n- All code used based off of [atom-rdio](https://github.com/EtienneLem/atom-rdio) by [EtienneLem](https://github.com/EtienneLem/)\n- Inspired by [atom-spotify](https://atom.io/packages/atom-spotify)\n- Sound bars based on [CSS3 Pseudo Sound Bars](http://codepen.io/jackrugile/pen/CkAbG)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/OskarPersson/atom-itunes/issues"
+  },
+  "homepage": "https://github.com/OskarPersson/atom-itunes",
+  "_id": "iTunes@0.2.0",
+  "_shasum": "d7365549c8722baf30ce399f6dcac7f5328b39fd",
+  "_resolved": "file:../d-115619-2877-kxy5ay/package.tgz",
+  "_from": "../d-115619-2877-kxy5ay/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "applescript",
+        "version": "0.2.1",
+        "path": "node_modules/applescript/lib/applescript.js"
+      }
+    ],
+    "extensions": {
+      ".coffee": [
+        "lib/itunes-desktop.coffee",
+        "lib/itunes-view.coffee",
+        "lib/itunes.coffee"
+      ],
+      ".json": [
+        "node_modules/applescript/._package.json",
+        "node_modules/applescript/package.json",
+        "package.json"
+      ],
+      ".js": [
+        "node_modules/applescript/lib/._applescript.js",
+        "node_modules/applescript/lib/applescript-parser.js",
+        "node_modules/applescript/lib/applescript.js",
+        "node_modules/applescript/samples/._execString.js",
+        "node_modules/applescript/samples/execFile.js",
+        "node_modules/applescript/samples/execString.js"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "lib",
+          ""
+        ],
+        "dependencies": {
+          "applescript": "0.2.1"
+        }
+      }
+    ]
   }
 }

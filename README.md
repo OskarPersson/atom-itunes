@@ -3,7 +3,7 @@
     <img src="http://images.apple.com/itunes/images/product_title.png">
     for Atom
   </h3>
-  (made by EtienneLem, modified for iTunes by reduxd)
+  (fork of [atom-itunes by reduxd](https://github.com/reduxd/atom-itunes))
   <h5>Control iTunes from Atom + Now Playing</h5>
   <br>
   <p><img src="http://puu.sh/7siAf.png"></p>
@@ -11,8 +11,8 @@
 </div>
 
 ## Features
-- Open iTunes when title is clicked.
-- Sound bars animation pauses when music is paused.
+* Open iTunes when title is clicked.
+* Sound bars animation pauses when iTunes is paused.
 
 ## Commands
 ```rb

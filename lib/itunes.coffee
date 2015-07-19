@@ -1,15 +1,15 @@
 iTunesView = require './itunes-view'
 
 module.exports =
-  configDefaults: do ->
-    configs = {}
-    for configName, configData of iTunesView.CONFIGS
-      configs[configData.key] = configData.default
+  config:
+    showEqualizer:
+      title: 'Show Equalizer'
+      description: 'May cause window resize performance issues'
+      type: 'boolean'
+      default: true
 
-    configs
-
-  activate: (state) ->
-    @itunesView = new iTunesView(state.itunesViewState)
+  consumeStatusBar: (statusBar) ->
+    @rdioView = new iTunesView(statusBar)
 
   deactivate: ->
     @itunesView.destroy()

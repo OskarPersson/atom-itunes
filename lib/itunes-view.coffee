@@ -1,15 +1,8 @@
-{View} = require 'atom'
-iTunesDesktop = require './itunes-desktop'
+{View} = require 'atom-space-pen-views'
+itunesDesktop = require './itunes-desktop'
 
 module.exports =
-class iTunesView extends View
-  @CONFIGS = {
-    showEqualizer:
-      key: 'showEqualizer (WindowResizePerformanceIssue)'
-      action: 'toggleEqualizer'
-      default: true
-  }
-
+class itunesView extends View
   @content: ->
     @div class: 'itunes', =>
       @div outlet: 'container', class: 'itunes-container inline-block', =>
@@ -22,53 +15,55 @@ class iTunesView extends View
 
         @a outlet: 'currentlyPlaying', href: 'javascript:',''
 
-  initialize: ->
+  initialize: (statusBar) ->
+    @statusBar = statusBar
     @currentTrack = {}
     @currentState = null
     @initiated = false
-    @itunesDesktop = new iTunesDesktop
+    @itunesDesktop = new itunesDesktop
 
-    this.addCommands()
-
-    # Make sure the view gets added last
-    if atom.workspaceView.statusBar
-      this.attach()
-    else
-      this.subscribe atom.packages.once 'activated', =>
-        setTimeout this.attach, 1
+    @addCommands()
+    @attach()
 
   destroy: ->
-    this.detach()
+    @detach()
 
   # Commands
   addCommands: ->
     # Defaults
-    for command in iTunesDesktop.COMMANDS
+    for command in itunesDesktop.COMMANDS
       do (command) =>
-        atom.workspaceView.command "itunes:#{command.name}", '.editor', => @itunesDesktop[command.name]()
+        atom.commands.add 'atom-workspace', "itunes:#{command.name}", => @itunesDesktop[command.name]()
+
+    # Open current track with iTunes.app
+    atom.commands.add 'atom-workspace', 'itunes:open-current-track', => @openWithitunes()
 
   # Attach the view to the farthest right of the status bar
   attach: =>
-    atom.workspaceView.statusBar.appendRight(this)
+    @statusBarTile = @statusBar.addRightTile(item: this, priority: -1001)
 
+    # Navigate to current track inside itunes
     @currentlyPlaying.on 'click', (e) =>
       @itunesDesktop.openWindow()
 
     # Toggle equalizer on config change
-    showEqualizerKey = "iTunes.#{iTunesView.CONFIGS.showEqualizer.key}"
-    this.subscribe atom.config.observe showEqualizerKey, callNow: true, =>
-      if atom.config.get(showEqualizerKey)
-        @soundBars.removeAttr('data-hidden')
-      else
-        @soundBars.attr('data-hidden', true)
+    atom.config.observe 'iTunes.showEqualizer', (value) =>
+      @toggleEqualizer(value)
 
-  afterAttach: =>
+  toggleEqualizer: (show) ->
+    if show
+      @soundBars.removeAttr('data-hidden')
+    else
+      @soundBars.attr('data-hidden', true)
+
+  attached: =>
     setInterval =>
       @itunesDesktop.currentState (state) =>
         if state isnt @currentState
           @currentState = state
           @soundBars.attr('data-state', state)
 
+        # iTunes is closed
         if state is undefined
           if @initiated
             @initiated = false
@@ -76,6 +71,7 @@ class iTunesView extends View
             @container.removeAttr('data-initiated')
           return
 
+        # iTunes is paused, but we know about the current track
         return if state is 'paused' and @initiated
 
         # Get current track data
