@@ -3,7 +3,8 @@
     <img src="http://images.apple.com/itunes/images/product_title.png">
     for Atom
   </h3>
-  (fork of [atom-itunes by reduxd](https://github.com/reduxd/atom-itunes))
+  (fork of [atom-itunes by reduxd][1])
+  
   <h5>Control iTunes from Atom + Now Playing</h5>
   <br>
   <p><img src="http://puu.sh/7siAf.png"></p>
@@ -30,3 +31,6 @@ Open iTunes
 - All code used based off of [atom-rdio](https://github.com/EtienneLem/atom-rdio) by [EtienneLem](https://github.com/EtienneLem/)
 - Inspired by [atom-spotify](https://atom.io/packages/atom-spotify)
 - Sound bars based on [CSS3 Pseudo Sound Bars](http://codepen.io/jackrugile/pen/CkAbG)
+
+
+[1]: https://github.com/reduxd/atom-itunes
