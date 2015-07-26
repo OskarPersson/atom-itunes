@@ -19,6 +19,11 @@ class itunesView extends View
     @statusBar = statusBar
     @currentTrack = {}
     @currentState = null
+    @dataSequence = ['track', 'artist', 'album']
+    @currentDataIndex = 0
+    @iTunesCheckInterval = atom.config.get('atom-itunes.iTunesCheckInterval')
+    @dataSequenceInterval = @iTunesCheckInterval * 3
+    @elapsed = 0
     @initiated = false
     @itunesDesktop = new itunesDesktop
 
@@ -76,13 +81,20 @@ class itunesView extends View
 
         # Get current track data
         @itunesDesktop.currentlyPlaying (data) =>
-          return unless data.artist and data.track
+          return unless (data.artist and data.track and data.album)
+          @showText = data[@dataSequence[@currentDataIndex]]
+          if @elapsed >= @dataSequenceInterval
+            if @currentDataIndex++ >= (@dataSequence.length - 1)
+              @currentDataIndex = 0
+            @elapsed = 0
+          else
+            @elapsed += @iTunesCheckInterval
+          @currentlyPlaying.text @showText
           return if data.artist is @currentTrack.artist and data.track is @currentTrack.track
-          @currentlyPlaying.text "#{data.artist} - #{data.track}"
           @currentTrack = data
 
           # Display container when hidden
           return if @initiated
           @initiated = true
           @container.attr('data-initiated', true)
-    , 1500
+    , @iTunesCheckInterval
