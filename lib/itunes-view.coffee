@@ -21,8 +21,8 @@ class itunesView extends View
     @currentState = null
     @dataSequence = ['track', 'artist', 'album']
     @currentDataIndex = 0
-    @iTunesCheckInterval = atom.config.get('atom-itunes.iTunesCheckInterval')
-    @dataSequenceInterval = @iTunesCheckInterval * 3
+    @iTunesRefreshInterval = atom.config.get('atom-itunes.iTunesRefreshInterval')
+    @dataSequenceInterval = @iTunesRefreshInterval * 2
     @elapsed = 0
     @initiated = false
     @itunesDesktop = new itunesDesktop
@@ -55,11 +55,21 @@ class itunesView extends View
     atom.config.observe 'atom-itunes.showEqualizer', (value) =>
       @toggleEqualizer(value)
 
+    # Toggle musical notes on config change
+    atom.config.observe 'atom-itunes.showNotes', (value) =>
+      @toggleNotes(value)
+
   toggleEqualizer: (show) ->
     if show
       @soundBars.removeAttr('data-hidden')
     else
       @soundBars.attr('data-hidden', true)
+
+  toggleNotes: (show) ->
+    if show
+      @currentlyPlaying.attr('class', 'notes')
+    else
+      @currentlyPlaying.removeAttr('class')
 
   attached: =>
     setInterval =>
@@ -88,7 +98,7 @@ class itunesView extends View
               @currentDataIndex = 0
             @elapsed = 0
           else
-            @elapsed += @iTunesCheckInterval
+            @elapsed += @iTunesRefreshInterval
           @currentlyPlaying.text @showText
           return if data.artist is @currentTrack.artist and data.track is @currentTrack.track
           @currentTrack = data
@@ -97,4 +107,4 @@ class itunesView extends View
           return if @initiated
           @initiated = true
           @container.attr('data-initiated', true)
-    , @iTunesCheckInterval
+    , @iTunesRefreshInterval

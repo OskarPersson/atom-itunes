@@ -10,7 +10,7 @@
 
 .itunes-container {
   display: none;
-  width: 200px;
+  width: 250px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -49,6 +49,11 @@
 .itunes-sound-bar:nth-child(4) { -webkit-animation-duration: 258ms }
 .itunes-sound-bar:nth-child(5) { -webkit-animation-duration: 200ms }
 
+.notes::before {
+  content: "♫ ";
+  font-size: 1em;
+  margin-right: 0.1875em;
+}
 
 @-webkit-keyframes sound {
   0%   { opacity: .35; height: 3px; }
