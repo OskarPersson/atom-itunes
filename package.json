@@ -1,7 +1,7 @@
 {
   "name": "atom-itunes",
   "main": "./lib/itunes",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "Control iTunes from Atom + Now Playing",
   "repository": {
     "type": "git",
