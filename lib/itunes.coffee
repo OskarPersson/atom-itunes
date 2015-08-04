@@ -4,22 +4,22 @@ module.exports =
   config:
     showEqualizer:
       title: 'Show Equalizer'
-      description: 'May cause window resize performance issues. Also uses CPU.'
+      description: 'May cause window resize performance issues & higher CPU.'
       type: 'boolean'
       default: true
     showNotes:
       title: 'Show Notes'
       description: 'Neatly delineate your status bar item with musical notation'
       type: 'boolean'
-      default: true
+      default: false
     cycleTrackInfo:
       title: 'Cycle Track Info'
       description: 'Cycle through track, artist and album (in that order)'
       type: 'boolean'
-      default: true
-    iTunesRefreshInterval:
+      default: false
+    itunesRefreshInterval:
       title: 'iTunes Refresh Interval (ms)'
-      description: 'How often to poll iTunes for track info'
+      description: 'How often to poll iTunes for track info (ms)'
       type: 'integer'
       default: 1500
 

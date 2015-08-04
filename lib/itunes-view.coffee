@@ -21,8 +21,8 @@ class itunesView extends View
     @currentState = null
     @dataSequence = ['track', 'artist', 'album']
     @currentDataIndex = 0
-    @iTunesRefreshInterval = atom.config.get('atom-itunes.iTunesRefreshInterval')
-    @dataSequenceInterval = @iTunesRefreshInterval * 2
+    @refreshInterval = atom.config.get('atom-itunes.itunesRefreshInterval')
+    @dataSequenceInterval = @refreshInterval * 2
     @elapsed = 0
     @initiated = false
     @itunesDesktop = new itunesDesktop
@@ -92,14 +92,24 @@ class itunesView extends View
         # Get current track data
         @itunesDesktop.currentlyPlaying (data) =>
           return unless (data.artist and data.track and data.album)
-          @showText = data[@dataSequence[@currentDataIndex]]
+
+          # Check if user wants to cycle track info
+          if atom.config.get('atom-itunes.cycleTrackInfo') == true
+            @showText = data[@dataSequence[@currentDataIndex]]
+          else
+            @showText = "#{data.artist} - #{data.track}"
+
+          # Check if we need to move on to the next data item
           if @elapsed >= @dataSequenceInterval
             if @currentDataIndex++ >= (@dataSequence.length - 1)
               @currentDataIndex = 0
             @elapsed = 0
           else
-            @elapsed += @iTunesRefreshInterval
+            @elapsed += @refreshInterval
+
+          # Set text
           @currentlyPlaying.text @showText
+
           return if data.artist is @currentTrack.artist and data.track is @currentTrack.track
           @currentTrack = data
 
@@ -107,4 +117,4 @@ class itunesView extends View
           return if @initiated
           @initiated = true
           @container.attr('data-initiated', true)
-    , @iTunesRefreshInterval
+    , @refreshInterval
