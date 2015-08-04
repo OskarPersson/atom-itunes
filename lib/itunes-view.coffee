@@ -19,6 +19,11 @@ class itunesView extends View
     @statusBar = statusBar
     @currentTrack = {}
     @currentState = null
+    @dataSequence = ['track', 'artist', 'album']
+    @currentDataIndex = 0
+    @refreshInterval = atom.config.get('atom-itunes.itunesRefreshInterval')
+    @dataSequenceInterval = @refreshInterval * 2
+    @elapsed = 0
     @initiated = false
     @itunesDesktop = new itunesDesktop
 
@@ -50,11 +55,21 @@ class itunesView extends View
     atom.config.observe 'atom-itunes.showEqualizer', (value) =>
       @toggleEqualizer(value)
 
+    # Toggle musical notes on config change
+    atom.config.observe 'atom-itunes.showNotes', (value) =>
+      @toggleNotes(value)
+
   toggleEqualizer: (show) ->
     if show
       @soundBars.removeAttr('data-hidden')
     else
       @soundBars.attr('data-hidden', true)
+
+  toggleNotes: (show) ->
+    if show
+      @currentlyPlaying.attr('class', 'notes')
+    else
+      @currentlyPlaying.removeAttr('class')
 
   attached: =>
     setInterval =>
@@ -76,13 +91,30 @@ class itunesView extends View
 
         # Get current track data
         @itunesDesktop.currentlyPlaying (data) =>
-          return unless data.artist and data.track
+          return unless (data.artist and data.track and data.album)
+
+          # Check if user wants to cycle track info
+          if atom.config.get('atom-itunes.cycleTrackInfo') == true
+            @showText = data[@dataSequence[@currentDataIndex]]
+          else
+            @showText = "#{data.artist} - #{data.track}"
+
+          # Check if we need to move on to the next data item
+          if @elapsed >= @dataSequenceInterval
+            if @currentDataIndex++ >= (@dataSequence.length - 1)
+              @currentDataIndex = 0
+            @elapsed = 0
+          else
+            @elapsed += @refreshInterval
+
+          # Set text
+          @currentlyPlaying.text @showText
+
           return if data.artist is @currentTrack.artist and data.track is @currentTrack.track
-          @currentlyPlaying.text "#{data.artist} - #{data.track}"
           @currentTrack = data
 
           # Display container when hidden
           return if @initiated
           @initiated = true
           @container.attr('data-initiated', true)
-    , 1500
+    , @refreshInterval

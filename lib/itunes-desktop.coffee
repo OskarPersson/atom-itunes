@@ -29,9 +29,11 @@ class iTunesDesktop
   currentlyPlaying: (callback) ->
     this.currentArtist (artist) =>
       this.currentTrack (track) =>
-        callback
-          artist: artist
-          track: track
+        this.currentAlbum (album) =>
+          callback
+            artist: artist
+            track: track
+            album: album
 
   # AppleScript helpers
   getCurrent: (data, callback) ->
